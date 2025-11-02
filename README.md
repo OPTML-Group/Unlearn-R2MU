@@ -1,3 +1,5 @@
+<div align='center'>
+
 # Reasoning Model Unlearning: Forgetting Traces, Not Just Answers, While Preserving Reasoning Skills
 
 <p align="center">
@@ -12,3 +14,4 @@
   <a href="https://github.com/OPTML-Group/Unlearn-R2MU"><img src="https://img.shields.io/github/stars/OPTML-Group/Unlearn-R2MU?style=social"></a>
 
 </p>
+</div>
