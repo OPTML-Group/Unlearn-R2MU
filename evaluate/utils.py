@@ -9,7 +9,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import re
 from fractions import Fraction
 
-# =========== 配置部分 ==============
 model_data = {
     "llama8b": {
         "model_name": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
@@ -264,7 +263,6 @@ def load_model_and_tokenizer(model_choice: str, device: str = "cuda"):
     return tokenizer, model
 
 
-# 在词表里找到 "Wait" 的 token id（假设该 token 存在）
 def get_wait_token_id(tokenizer):
     wait_ids = tokenizer("Wait", add_special_tokens=False).input_ids
     if len(wait_ids) == 1:
@@ -275,22 +273,16 @@ def get_wait_token_id(tokenizer):
 import string
 
 def filter_vocabulary(tokenizer, token_embedding_table):
-    """
-    返回:
-        filtered_indices: 一个 1-D 张量，包含筛选后在 vocab 中的索引
-        filtered_embs: shape = (filtered_size, hidden_dim)，对应筛选后 token 的嵌入
-    """
+
     allowed_chars = set(string.ascii_letters + string.digits + string.punctuation + ' \t\n\r')
     vocab_size = token_embedding_table.size(0)
 
     valid_list = []
     for i in range(vocab_size):
-        token_str = tokenizer.decode([i])  # 解码单个 token id -> 文本
-        # 如果 token_str 为空，或者含有不在 allowed_chars 集合内的字符，就跳过
+        token_str = tokenizer.decode([i])  
         if not token_str:
             continue
 
-        # 检查每个字符
         is_valid = True
         for ch in token_str:
             if ch not in allowed_chars:
@@ -300,26 +292,20 @@ def filter_vocabulary(tokenizer, token_embedding_table):
         if is_valid:
             valid_list.append(i)
 
-    # 构建返回值
     filtered_indices = torch.tensor(valid_list, dtype=torch.long, device=token_embedding_table.device)
     filtered_embs = token_embedding_table[filtered_indices]  # shape (filtered_size, hidden_dim)
     return filtered_indices, filtered_embs
 
-# =========== 句子切分示例函数 ==============
 def split_into_sentences(text):
-    """
-    根据 '.' 和 '?' 等简单切分句子。
-    注意这只是简易示例，实际需要更健壮的分句。
-    """
+
     import re
-    # 以句号或问号切分，并保留分隔符
-    # 例如 "你好.我是谁?哈哈." -> ["你好.", "我是谁?", "哈哈."]
+    
     sentences = re.split(r'([.?])', text)
-    # 把分隔符合并回前一个文本
+
     merged = []
     for i in range(0, len(sentences) - 1, 2):
         merged.append(sentences[i].strip() + sentences[i + 1])
-    # 如果总数是奇数，说明最后一个不带标点，手动添加
+    
     if len(sentences) % 2 == 1:
         if sentences[-1].strip():
             merged.append(sentences[-1].strip())
@@ -333,7 +319,7 @@ def test_sp_sampling(sp, model, tokenizer, question_text, special_token_id, devi
         with torch.no_grad():
             logits = sp.proj(sp.phi)
             discrete_tokens = logits.argmax(dim=-1).cpu().tolist()
-            # 把 discrete tokens 变成 text
+            
             discrete_tokens_text = tokenizer.decode(discrete_tokens)
         if use_prefix:
             full_prompt = discrete_tokens_text + question_text + "\n<think>"
@@ -366,7 +352,7 @@ def test_sp_sampling(sp, model, tokenizer, question_text, special_token_id, devi
         generated_text = tokenizer.decode(gen_ids, skip_special_tokens=False)
         answers.append(generated_text)
 
-        # 找到 </think> 的位置
+
         gen_ids_list = gen_ids.detach().cpu().tolist()
         if special_token_id in gen_ids:
             idx = gen_ids_list.index(special_token_id)
@@ -379,7 +365,6 @@ def test_sp_sampling(sp, model, tokenizer, question_text, special_token_id, devi
         lengths.append(length_before_think)
         think_answers.append(generated_think_text)
 
-        # 统计在</think> token 之前 “Wait” token 的数量
         if wait_id in gen_ids_list:
             wait_count = gen_ids_list.count(wait_id)
         else:
@@ -406,11 +391,7 @@ def test_sp_sampling(sp, model, tokenizer, question_text, special_token_id, devi
     return results
 
 def load_answers(data_dir="./datasets/qwen7b/question_1"):
-    """
-    假设第一阶段已经采集好了回答，
-    每个回答保存为 answer_{i}.json,
-    其中含有 "answer" 字段或 "tokens" 字段。
-    """
+
     answer_files = [os.path.join(data_dir, f)
                     for f in os.listdir(data_dir)
                     if f.endswith(".json")]
@@ -436,7 +417,7 @@ class SoftPrompt(nn.Module):
         self.vocab_size = vocab_size
         self.temperature = temperature
 
-        # 不要直接 dtype=torch.float16，这里用fp32参数
+        
         self.phi = nn.Parameter(torch.zeros(prompt_length, embedding_dim, dtype=torch.float32))
         self.proj = nn.Linear(embedding_dim, vocab_size, bias=False, dtype=torch.float32)
 
@@ -444,7 +425,7 @@ class SoftPrompt(nn.Module):
         nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)
 
     def forward(self, token_embedding, gumbel_tau=1.0, straight_through=False):
-        # 让它在 fp32 下完成
+        
         logits = self.proj(self.phi)  # (L, vocab_size), float32
 
         gumbels = -torch.empty_like(logits).exponential_().log()  # 也在 float32
@@ -458,8 +439,7 @@ class SoftPrompt(nn.Module):
         else:
             y = y_soft
 
-        # 这里的 token_embedding 可能是 fp16，也可能是 fp32
-        # 如果是 fp16，需要先把 y 转成同样的 dtype
+        
         y = y.to(token_embedding.dtype)
 
         prompt_emb = torch.mm(y, token_embedding)  # (L, d), 跟 token_embedding 保持同 dtype
@@ -470,9 +450,7 @@ class SoftPrompt(nn.Module):
 # Evaluation Utility functions
 # ------------------------------------------------------------------------------------
 
-# --- 新增处理：数字位数写法的逗号移除 ---
-# 定义一个函数，将 candidate 中类似 "22,222" 或 "2,324,151.23"（逗号后无空格）的数字内部的逗号移除，
-# 但不会移除类似 "200, 300" 这种逗号后有空格的情况。
+
 def remove_thousands_commas(text: str) -> str:
     pattern = r'\b\d{1,3}(,\d{3})+\b'
     return re.sub(pattern, lambda m: m.group(0).replace(",", ""), text)
@@ -547,32 +525,28 @@ def normalize_expr(expr: str):
     # Convert angle unit: replace "^\circ" with "degrees"
     expr = expr.replace("^\\circ", "degrees")
 
-    # Remove all whitespace (先不去掉空白，方便后续对日期或货币的判断)
+    
     expr = re.sub(r"\s+", "", expr).strip()
 
-    # --------- 货币转换处理 ---------
-    # 如果表达式中包含货币符号或货币代码，则提取数字部分并转换为 float 的字符串
+
     if re.search(r"[\$\¥]|(?:USD|CNY|RMB|EUR)", expr, re.IGNORECASE):
-        # 去除除数字、小数点和负号之外的所有字符
         value = re.sub(r"[^0-9\.-]", "", expr)
         try:
             expr = str(float(value))
         except Exception:
             pass
 
-    # --------- 日期格式统一处理 ---------
-    # 定义若干常见的日期格式
     date_formats = [
-        "%m/%d/%Y", "%m-%d-%Y", "%m/%d/%y", "%m-%d-%y",  # 数字形式，如 1/2/2020 或 01-02-2020
-        "%Y/%m/%d", "%Y-%m-%d",  # 年月日顺序，如 2020/1/2 或 2020-01-02
-        "%B%d,%Y", "%b%d,%Y", "%B%d,%y", "%b%d,%y",  # 如 January1,2020 或 Jan1,2020（不带空格）
-        "%B%d%Y", "%b%d%Y",  # 如 January12020（不常见）
-        "%B%d,%Y", "%b%d,%Y",  # 如果有空格可调整
-        "%B %d, %Y", "%b %d, %Y",  # 如 January 1, 2020 或 Jan 1, 2020
-        "%d%B%Y", "%d%b%Y",  # 如 1January2020 或 1Jan2020
-        "%d %B %Y", "%d %b %Y"  # 如 1 January 2020 或 1 Jan 2020
+        "%m/%d/%Y", "%m-%d-%Y", "%m/%d/%y", "%m-%d-%y",  
+        "%Y/%m/%d", "%Y-%m-%d",  
+        "%B%d,%Y", "%b%d,%Y", "%B%d,%y", "%b%d,%y",  
+        "%B%d%Y", "%b%d%Y",  
+        "%B%d,%Y", "%b%d,%Y",  
+        "%B %d, %Y", "%b %d, %Y",  
+        "%d%B%Y", "%d%b%Y",  
+        "%d %B %Y", "%d %b %Y"  
     ]
-    # 尝试用以上格式解析整个表达式，如果成功则统一为 YYYY-MM-DD
+
     for fmt in date_formats:
         try:
             dt = datetime.strptime(expr, fmt)
@@ -581,61 +555,45 @@ def normalize_expr(expr: str):
         except ValueError:
             continue
 
-    # 最后再次移除所有空白字符（以防前面日期转换后带有空格）
+    
     expr = re.sub(r"\s+", "", expr).strip()
 
     return expr
 
 
 def classify_answer(gold_ans: str):
-    """
-    Classify the answer into a type among (date, fraction, decimal, expression, text, etc.)
-    Also create a canonical representation if possible.
 
-    新增处理：
-    (1) 如果答案是日期，则类型为 "date"。支持多种日期格式，如数字格式（1/2/2020、2020-1-2等）和包含月份名称的格式（January 1, 2020、Jan 1, 2020）。
-    (2) 如果答案含有货币符号（例如 $, ¥, USD, CNY, RMB 等），则去掉货币符号后转换为数字，类型归为 "decimal"。
-    (3) 纯数字（整数或小数）统一归为 "decimal" 类型。
-    (4) 如果答案写作 \fracxy（其中 x,y 为数字），先转换为标准形式 \frac{x}{y}。
-    (5) 如果答案完全不含数字，则当作纯文本，类型为 "text"；其他情况归为 "expression".
 
-    Returns a tuple: (type, canonical_value)
-    """
-    # 去除前后空白
     gold_ans_stripped = gold_ans.strip()
 
     gold_ans_stripped = remove_thousands_commas(gold_ans_stripped)
 
-    # 将形如 \frac43 的写法转换为标准形式 \frac{4}{3}
+    
     gold_ans_stripped = re.sub(r"(\\frac)(?!\s*\{)(\d+)(?!\s*\{)(\d+)", r"\1{\2}{\3}", gold_ans_stripped)
 
 
-    # ----------------- 1. 日期判断 -----------------
-    # 日期常见格式：
-    #   a. 数字形式：1/2/2020, 01-02-2020, 2020-1-2, 2020/01/02 等
-    #   b. 包含月份名称：January 1, 2020, Jan 1 2020, 1 Jan 2020, etc.
+    
     date_numeric_pattern1 = r"^\d{1,2}[/-]\d{1,2}[/-]\d{2,4}$"
     date_numeric_pattern2 = r"^\d{4}[/-]\d{1,2}[/-]\d{1,2}$"
-    # 包含月份名称（全写或简写），忽略大小写
+
     date_text_pattern = r"(?i)^(?:(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[ ,.-]*)+\d{1,2}[, \.-]+\d{2,4}$"
     if (re.match(date_numeric_pattern1, gold_ans_stripped) or
             re.match(date_numeric_pattern2, gold_ans_stripped) or
             re.match(date_text_pattern, gold_ans_stripped)):
-        # 这里直接返回原字符串，或可进一步转换为统一的格式，如 YYYY-MM-DD（此处暂直接返回归一化后的字符串）
+        
         return ("date", gold_ans_stripped)
 
-    # ----------------- 2. 货币判断 -----------------
-    # 如果包含美元符号、人民币符号或常见货币代码（USD, CNY, RMB, EUR等），则视为货币
+
     if re.search(r"[\¥\€\￡]|(?:USD|CNY|RMB|EUR|JPY|GBP)", gold_ans_stripped, re.IGNORECASE):
-        # 去除所有非数字、非小数点、非负号的字符
+        
         cleaned = re.sub(r"[^0-9\.-]", "", gold_ans_stripped)
         try:
             value = float(cleaned)
             return ("decimal", value)
         except:
-            pass  # 如果转换失败，则继续下面的判断
+            pass 
 
-    # ----------------- 3. 分数判断 -----------------
+
     frac_pattern = r"frac\s*\{(-?\d+)\}\s*\{(-?\d+)\}"
     match_frac = re.search(frac_pattern, gold_ans_stripped)
     if match_frac:
@@ -643,21 +601,21 @@ def classify_answer(gold_ans: str):
         denominator = int(match_frac.group(2))
         return ("fraction", Fraction(numerator, denominator))
 
-    # 4. 检查是否为整数（可能带负号）
+
     int_pattern = r"^-?\d+$"
     if re.match(int_pattern, gold_ans_stripped):
         return ("integer", int(gold_ans_stripped))
 
-    # 5. 检查是否为小数
+    
     dec_pattern = r"^-?\d+\.\d+$"
     if re.match(dec_pattern, gold_ans_stripped):
         return ("decimal", float(gold_ans_stripped))
 
-    # ----------------- 6. 如果答案完全不含数字，则当作纯文本 -----------------
+   
     if re.search(r"[0-9]", gold_ans_stripped) is None:
         return ("text", gold_ans_stripped)
 
-    # ----------------- 7. 其他情况归为 expression -----------------
+
     return ("expression", gold_ans_stripped)
 
 
@@ -693,7 +651,7 @@ def extract_model_answer(response: str, gold_type: str) -> str:
 
     # Find the last trigger in the response
     for t in triggers:
-        # 从后往前找，找到最后一个触发词
+
         # idx = lower_resp.rfind(t)
         positions = find_all_occurrences(lower_resp, t)
         if len(positions) > 0:
@@ -715,12 +673,12 @@ def extract_model_answer(response: str, gold_type: str) -> str:
     # If there is a structure like \boxed{}, then we should extract the content inside the box and ignore the rest
     idx_box = candidate.find(r'\boxed{')
     if idx_box != -1:
-        # 找到 \boxed{ 后，确定内容开始的位置
+        
         start = candidate.find('{', idx_box)
         if start != -1:
             brace_count = 0
             end = start
-            # 从 start 位置开始遍历，使用计数法匹配花括号
+            
             for i in range(start, len(candidate)):
                 if candidate[i] == '{':
                     brace_count += 1
@@ -729,7 +687,7 @@ def extract_model_answer(response: str, gold_type: str) -> str:
                     if brace_count == 0:
                         end = i
                         break
-            # 如果成功匹配，则提取 \boxed{...} 内的内容
+           
             if brace_count == 0:
                 candidate = candidate[start + 1:end].strip()
     candidate = normalize_expr(candidate)
@@ -760,11 +718,11 @@ def extract_model_answer(response: str, gold_type: str) -> str:
     #         return all_decs[-1].group(0).strip()
 
     elif gold_type in ["integer", "decimal"]:
-        # 匹配整数或小数：小数部分 (?:\.\d+)? 可有可无
+        
         number_pattern = re.compile(r"-?\d+(?:\.\d+)?")
         all_numbers = list(re.finditer(number_pattern, normalize_expr(candidate)))
         if all_numbers:
-            # 选择最后一个匹配的数字
+            
             return all_numbers[-1].group(0).strip()
 
     # For text or expression, we can skip specialized checks because the model might output anything.
@@ -809,11 +767,7 @@ def classify_model_answer(model_ans_str: str):
 
 
 def extract_number_substrings(s: str):
-    """
-    从字符串 s 中简单地提取所有连续的数字和小数点组成的子串，
-    遍历字符串，当遇到 digit 或者 '.' 就开始记录，直到遇到其他字符停止，
-    返回所有提取到的子串列表。
-    """
+
     result = []
     i = 0
     n = len(s)
@@ -829,14 +783,9 @@ def extract_number_substrings(s: str):
 
 
 def compare_answers(gold_type, gold_value, pred_type, pred_value, decimal_tolerance=1e-7):
-    """
-    Compare the gold answer and predicted answer.
-    1. 先对两者进行归一化处理。
-    2. 如果归一化结果完全一致，或者其中一个归一化结果包含另一个，则视为匹配正确。
-    3. 否则，根据类型和数值误差进行比较。
-    """
 
-    # 0. 快速判断：提取归一化结果中的所有数字（整数或小数），如果完全一致，则认为匹配
+
+    
     nums_gold = extract_number_substrings(str(gold_value))
     nums_pred = extract_number_substrings(str(pred_value))
     if nums_gold == nums_pred:
@@ -845,18 +794,16 @@ def compare_answers(gold_type, gold_value, pred_type, pred_value, decimal_tolera
     norm_gold = normalize_expr(str(gold_value))
     norm_pred = normalize_expr(str(pred_value))
 
-    # 1. 如果完全一致，返回 True
+   
     if norm_gold == norm_pred:
         return True
 
-    # 2. 如果一个是另一个的子串，也认为匹配正确
-    # 只有字符串才符合这个规则
+    
     if gold_type not in ("integer", "decimal") and pred_type not in ("integer", "decimal"):
-        # 是字符串类型，且一个是另一个的子串
+        
         if norm_gold in norm_pred or norm_pred in norm_gold:
             return True
 
-    # 4. 类型相同时，根据数值进行比较
     if gold_type == pred_type:
         if gold_type == "integer":
             return (gold_value == pred_value)
@@ -869,7 +816,7 @@ def compare_answers(gold_type, gold_value, pred_type, pred_value, decimal_tolera
         else:
             return norm_gold == norm_pred
 
-    # 5. 处理不同类型的数值比较
+
     if gold_type == "fraction" and pred_type == "decimal":
         return abs(float(gold_value) - pred_value) < decimal_tolerance
     if gold_type == "decimal" and pred_type == "fraction":
@@ -920,12 +867,11 @@ class DecayingWaitLogitsProcessor(LogitsProcessor):
         self.min_prob_scale = min_prob_scale
 
     def __call__(self, input_ids, scores):
-        step = input_ids.shape[1]  # 当前生成的 token 数
-        # 计算衰减系数：从 1.0 衰减到 min_prob_scale
+        step = input_ids.shape[1]  
+        
         decay_factor = max(self.min_prob_scale, 1.0 - step / self.max_decay_steps)
 
-        # print(f"Before logitsprocessor: {scores[:, self.wait_token_id]}")
-        # 对 wait 这个词的 logits 乘上 decay_factor
+        
         scores[:, self.wait_token_id] *= decay_factor
         # print(f"After logitsprocessor: {scores[:, self.wait_token_id]}")
         return scores
@@ -933,11 +879,7 @@ class DecayingWaitLogitsProcessor(LogitsProcessor):
 
 class WaitCountPenaltyProcessor(LogitsProcessor):
     def __init__(self, tokenizer, gamma=0.8):
-        """
-        Args:
-            tokenizer: 用于获取 'wait' 的 token ID。
-            gamma: 每生成一次 wait，其 logits 惩罚乘以 gamma (0 < gamma <= 1)。
-        """
+
         self.wait_token_id = tokenizer.convert_tokens_to_ids("wait")
         self.gamma = gamma
 
@@ -962,8 +904,8 @@ class DecayProcessor(LogitsProcessor):
         self.alpha = alpha
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
-        step = input_ids.shape[1]  # 当前生成步数
-        # 计算衰减系数（alpha 控制衰减速度）
+        step = input_ids.shape[1]  
+        
         decay_factor = max(0.0, 1.0 - self.alpha * step / self.max_new_tokens)
 
         for wait_token_id in self.wait_token_ids:
@@ -981,7 +923,7 @@ class PenaltyProcessor(LogitsProcessor):
         batch_size = input_ids.shape[0]
 
         for i in range(batch_size):
-            # 累计 wait / Wait 的出现次数
+           
             wait_count = sum((input_ids[i] == token_id).sum().item() for token_id in self.wait_token_ids)
             penalty = self.gamma ** wait_count
             for wait_token_id in self.wait_token_ids:
