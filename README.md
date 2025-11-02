@@ -62,3 +62,33 @@ CUDA_VISIBLE_DEVICES=0,1 python3 -m unlearn_wmdp \
   --max_gen_tokens 100 \
   --verbose
 ```
+### LLM API Evaluation
+
+After you get the unlearned model, run the generation code to get the reasoning trace first: 
+
+The first step is change your model in `utils.py`, add your model like this:
+
+```
+    "RMU_unlearn_test_11_2_2025": {
+        "model_name": "", # Add your own model path.
+        "tokenizer_name": "", # Add your own model path.
+        "special_token_id": 128014
+    },
+```
+The second step is generation, run command:
+
+```
+bash ./evaluate/run.sh
+```
+The command in run.sh is like this:
+
+Change the --max_samples to 100000 if you want run the whole WMPD evaluation. Change model_choice to your own model name.
+```
+CUDA_VISIBLE_DEVICES=0,1,2,3,4 torchrun --nproc_per_node=5 evaluate_claude_save.py --mode Reason_think --datasets wmdp --model_choice RMU_unlearn_test_11_2_2025 --wmdp_subject wmdp-bio --batch_size 4 --max_samples 10
+```
+
+And please change the API key in api_check_reasoning_trace_score_4.py and change the file path `input_path` in file then run the command: 
+
+```
+python ./evaluate/api_check_reasoning_trace_score_4.py
+```
