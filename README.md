@@ -15,3 +15,12 @@
 
 </p>
 </div>
+
+## How to run the code?
+
+### Install the conda enviroment
+
+You can install the required dependencies as the instruction in [SOUL](https://github.com/OPTML-Group/SOUL):
+
+### Run the Unlearn part
+
