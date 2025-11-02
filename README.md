@@ -24,11 +24,13 @@ You can install the required dependencies as the instruction in [SOUL](https://g
 
 ### Run the Unlearn part
 
-`
+```
 bash run.sh
-`
+```
+
 In `run.sh`, command is like:
-`
+
+```
 # Put your own lm-evaluation-harness path here
 export PYTHONPATH=lm-evaluation-harness:$PYTHONPATH
 
@@ -59,4 +61,4 @@ CUDA_VISIBLE_DEVICES=0,1 python3 -m unlearn_wmdp \
   --raw_path ./bio_remove_dataset.jsonl \  # This is the WMPD bio dataset
   --max_gen_tokens 100 \
   --verbose
-`
+```
