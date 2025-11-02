@@ -1,0 +1,269 @@
+(wmdp3_new) wangc168@otml-seit2:/egr/research-optml/wangc168/reasoning/R2MU$ bash /egr/research-optml/wangc168/reasoning/R2MU/run.sh
+/egr/research-optml/wangc168/anaconda3/envs/wmdp3_new/lib/python3.9/site-packages/transformers/utils/hub.py:105: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+Loading checkpoint shards: 100%|█████████████████████████████████████████████| 2/2 [00:02<00:00,  1.39s/it]
+Loading checkpoint shards: 100%|█████████████████████████████████████████████| 2/2 [00:02<00:00,  1.23s/it]
+24441
+2891
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+        - Avoid using `tokenizers` before the fork if possible
+        - Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+        - Avoid using `tokenizers` before the fork if possible
+        - Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+        - Avoid using `tokenizers` before the fork if possible
+        - Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+wandb: Tracking run with wandb version 0.19.10
+wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+  0%|                                                                              | 0/500 [00:00<?, ?it/s]/egr/research-optml/wangc168/reasoning/R2MU/unlearn_wmdp.py:247: UserWarning: Using a target size (torch.Size([1, 1, 4096])) that is different to the input size (torch.Size([4, 512, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  unlearn_loss = torch.nn.functional.mse_loss(updated_forget_activations, control_vec)
+/egr/research-optml/wangc168/reasoning/R2MU/unlearn_wmdp.py:249: UserWarning: Using a target size (torch.Size([1, 1, 4096])) that is different to the input size (torch.Size([4, 110, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  extent_loss = torch.nn.functional.mse_loss(extent_activations, control_vec)
+ 40%|███████████████████████████▏                                        | 200/500 [05:44<08:53,  1.78s/it]Saved model to models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_199
+/egr/research-optml/wangc168/reasoning/R2MU/unlearn_wmdp.py:247: UserWarning: Using a target size (torch.Size([1, 1, 4096])) that is different to the input size (torch.Size([4, 512, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  unlearn_loss = torch.nn.functional.mse_loss(updated_forget_activations, control_vec)
+/egr/research-optml/wangc168/reasoning/R2MU/unlearn_wmdp.py:249: UserWarning: Using a target size (torch.Size([1, 1, 4096])) that is different to the input size (torch.Size([4, 110, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  extent_loss = torch.nn.functional.mse_loss(extent_activations, control_vec)
+ 80%|██████████████████████████████████████████████████████▍             | 400/500 [12:14<03:00,  1.81s/it]Saved model to models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_399
+/egr/research-optml/wangc168/reasoning/R2MU/unlearn_wmdp.py:247: UserWarning: Using a target size (torch.Size([1, 1, 4096])) that is different to the input size (torch.Size([4, 512, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  unlearn_loss = torch.nn.functional.mse_loss(updated_forget_activations, control_vec)
+/egr/research-optml/wangc168/reasoning/R2MU/unlearn_wmdp.py:249: UserWarning: Using a target size (torch.Size([1, 1, 4096])) that is different to the input size (torch.Size([4, 110, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  extent_loss = torch.nn.functional.mse_loss(extent_activations, control_vec)
+100%|████████████████████████████████████████████████████████████████████| 500/500 [15:53<00:00,  1.61s/it]Saved model to models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499
+100%|████████████████████████████████████████████████████████████████████| 500/500 [16:40<00:00,  2.00s/it]
+['lm_eval', '--model', 'hf', '--model_args', 'pretrained=models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499,cache_dir=./.cache,device_map=auto,parallelize=True', '--tasks', 'wmdp_bio', '--batch_size', 'auto', '--output_path', 'models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499/wmdp.json']
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+        - Avoid using `tokenizers` before the fork if possible
+        - Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+/egr/research-optml/wangc168/anaconda3/envs/wmdp3_new/lib/python3.9/site-packages/transformers/utils/hub.py:105: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+2025-11-02:00:08:53 INFO     [__main__:440] Selected Tasks: ['wmdp_bio']
+2025-11-02:00:08:53 INFO     [evaluator:185] Setting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234 | Setting fewshot manual seed to 1234
+2025-11-02:00:08:53 INFO     [evaluator:223] Initializing hf model, with arguments: {'pretrained': 'models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499', 'cache_dir': './.cache', 'device_map': 'auto', 'parallelize': True}
+2025-11-02:00:08:54 INFO     [models.huggingface:365] Model parallel was set to True, setting max memory per GPU to {0: 49957896192, 1: 49997742080} and device map to auto
+Loading checkpoint shards: 100%|█████████████████████████████████████████████| 4/4 [00:16<00:00,  4.07s/it]
+2025-11-02:00:09:12 INFO     [api.task:434] Building contexts for wmdp_bio on rank 0...
+100%|█████████████████████████████████████████████████████████████████| 1273/1273 [00:01<00:00, 857.80it/s]
+2025-11-02:00:09:13 INFO     [evaluator:559] Running loglikelihood requests
+Running loglikelihood requests:   0%|                                             | 0/5092 [00:00<?, ?it/s]Passed argument batch_size = auto:1. Detecting largest batch size
+Determined largest batch size: 64
+Running loglikelihood requests: 100%|██████████████████████████████████| 5092/5092 [00:59<00:00, 85.76it/s]
+fatal: not a git repository (or any parent up to mount point /egr/research-optml)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+2025-11-02:00:10:27 INFO     [loggers.evaluation_tracker:209] Saving results aggregated
+hf (pretrained=models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499,cache_dir=./.cache,device_map=auto,parallelize=True), gen_kwargs: (None), limit: None, num_fewshot: None, batch_size: auto (64)
+| Tasks  |Version|Filter|n-shot|Metric|   |Value |   |Stderr|
+|--------|------:|------|-----:|------|---|-----:|---|-----:|
+|wmdp_bio|      1|none  |     0|acc   |↑  |0.3103|±  | 0.013|
+
+['lm_eval', '--model', 'hf', '--model_args', 'pretrained=models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499,cache_dir=./.cache,device_map=auto,parallelize=True', '--tasks', 'mmlu', '--batch_size', 'auto', '--output_path', 'models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499/mmlu.json']
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+        - Avoid using `tokenizers` before the fork if possible
+        - Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+/egr/research-optml/wangc168/anaconda3/envs/wmdp3_new/lib/python3.9/site-packages/transformers/utils/hub.py:105: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+2025-11-02:00:10:46 INFO     [__main__:440] Selected Tasks: ['mmlu']
+2025-11-02:00:10:46 INFO     [evaluator:185] Setting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234 | Setting fewshot manual seed to 1234
+2025-11-02:00:10:46 INFO     [evaluator:223] Initializing hf model, with arguments: {'pretrained': 'models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499', 'cache_dir': './.cache', 'device_map': 'auto', 'parallelize': True}
+2025-11-02:00:10:46 INFO     [models.huggingface:365] Model parallel was set to True, setting max memory per GPU to {0: 49957896192, 1: 49997742080} and device map to auto
+Loading checkpoint shards: 100%|█████████████████████████████████████████████| 4/4 [00:03<00:00,  1.27it/s]
+2025-11-02:00:12:12 INFO     [api.task:434] Building contexts for mmlu_elementary_mathematics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 378/378 [00:00<00:00, 814.14it/s]
+2025-11-02:00:12:12 INFO     [api.task:434] Building contexts for mmlu_high_school_statistics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 216/216 [00:00<00:00, 840.69it/s]
+2025-11-02:00:12:13 INFO     [api.task:434] Building contexts for mmlu_machine_learning on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 112/112 [00:00<00:00, 829.06it/s]
+2025-11-02:00:12:13 INFO     [api.task:434] Building contexts for mmlu_electrical_engineering on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 145/145 [00:00<00:00, 896.99it/s]
+2025-11-02:00:12:13 INFO     [api.task:434] Building contexts for mmlu_abstract_algebra on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 846.06it/s]
+2025-11-02:00:12:13 INFO     [api.task:434] Building contexts for mmlu_high_school_physics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 151/151 [00:00<00:00, 851.61it/s]
+2025-11-02:00:12:13 INFO     [api.task:434] Building contexts for mmlu_college_computer_science on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 824.28it/s]
+2025-11-02:00:12:13 INFO     [api.task:434] Building contexts for mmlu_high_school_biology on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 310/310 [00:00<00:00, 838.20it/s]
+2025-11-02:00:12:14 INFO     [api.task:434] Building contexts for mmlu_high_school_mathematics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 270/270 [00:00<00:00, 845.22it/s]
+2025-11-02:00:12:14 INFO     [api.task:434] Building contexts for mmlu_college_mathematics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 866.19it/s]
+2025-11-02:00:12:14 INFO     [api.task:434] Building contexts for mmlu_anatomy on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 135/135 [00:00<00:00, 885.89it/s]
+2025-11-02:00:12:14 INFO     [api.task:434] Building contexts for mmlu_conceptual_physics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 846.67it/s]
+2025-11-02:00:12:15 INFO     [api.task:434] Building contexts for mmlu_high_school_computer_science on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 854.73it/s]
+2025-11-02:00:12:15 INFO     [api.task:434] Building contexts for mmlu_high_school_chemistry on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 203/203 [00:00<00:00, 816.97it/s]
+2025-11-02:00:12:15 INFO     [api.task:434] Building contexts for mmlu_college_physics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 102/102 [00:00<00:00, 816.24it/s]
+2025-11-02:00:12:15 INFO     [api.task:434] Building contexts for mmlu_college_chemistry on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 847.31it/s]
+2025-11-02:00:12:15 INFO     [api.task:434] Building contexts for mmlu_computer_security on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 810.20it/s]
+2025-11-02:00:12:15 INFO     [api.task:434] Building contexts for mmlu_college_biology on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 144/144 [00:00<00:00, 864.57it/s]
+2025-11-02:00:12:16 INFO     [api.task:434] Building contexts for mmlu_astronomy on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 152/152 [00:00<00:00, 878.73it/s]
+2025-11-02:00:12:16 INFO     [api.task:434] Building contexts for mmlu_business_ethics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 796.88it/s]
+2025-11-02:00:12:16 INFO     [api.task:434] Building contexts for mmlu_college_medicine on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 173/173 [00:00<00:00, 861.49it/s]
+2025-11-02:00:12:16 INFO     [api.task:434] Building contexts for mmlu_human_aging on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 223/223 [00:00<00:00, 832.30it/s]
+2025-11-02:00:12:16 INFO     [api.task:434] Building contexts for mmlu_professional_medicine on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 272/272 [00:00<00:00, 832.40it/s]
+2025-11-02:00:12:17 INFO     [api.task:434] Building contexts for mmlu_professional_accounting on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 282/282 [00:00<00:00, 880.02it/s]
+2025-11-02:00:12:17 INFO     [api.task:434] Building contexts for mmlu_global_facts on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 814.58it/s]
+2025-11-02:00:12:17 INFO     [api.task:434] Building contexts for mmlu_nutrition on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 306/306 [00:00<00:00, 852.55it/s]
+2025-11-02:00:12:18 INFO     [api.task:434] Building contexts for mmlu_marketing on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 234/234 [00:00<00:00, 850.66it/s]
+2025-11-02:00:12:18 INFO     [api.task:434] Building contexts for mmlu_virology on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 166/166 [00:00<00:00, 861.22it/s]
+2025-11-02:00:12:18 INFO     [api.task:434] Building contexts for mmlu_medical_genetics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 806.38it/s]
+2025-11-02:00:12:18 INFO     [api.task:434] Building contexts for mmlu_management on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 103/103 [00:00<00:00, 904.23it/s]
+2025-11-02:00:12:18 INFO     [api.task:434] Building contexts for mmlu_clinical_knowledge on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 265/265 [00:00<00:00, 821.75it/s]
+2025-11-02:00:12:19 INFO     [api.task:434] Building contexts for mmlu_miscellaneous on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 783/783 [00:00<00:00, 847.26it/s]
+2025-11-02:00:12:20 INFO     [api.task:434] Building contexts for mmlu_security_studies on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 245/245 [00:00<00:00, 855.63it/s]
+2025-11-02:00:12:20 INFO     [api.task:434] Building contexts for mmlu_sociology on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 201/201 [00:00<00:00, 829.39it/s]
+2025-11-02:00:12:20 INFO     [api.task:434] Building contexts for mmlu_human_sexuality on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 131/131 [00:00<00:00, 824.99it/s]
+2025-11-02:00:12:20 INFO     [api.task:434] Building contexts for mmlu_professional_psychology on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 612/612 [00:00<00:00, 644.53it/s]
+2025-11-02:00:12:21 INFO     [api.task:434] Building contexts for mmlu_high_school_government_and_politics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 193/193 [00:00<00:00, 852.95it/s]
+2025-11-02:00:12:22 INFO     [api.task:434] Building contexts for mmlu_high_school_macroeconomics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 390/390 [00:00<00:00, 853.07it/s]
+2025-11-02:00:12:22 INFO     [api.task:434] Building contexts for mmlu_econometrics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 114/114 [00:00<00:00, 815.56it/s]
+2025-11-02:00:12:22 INFO     [api.task:434] Building contexts for mmlu_high_school_geography on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 198/198 [00:00<00:00, 856.63it/s]
+2025-11-02:00:12:22 INFO     [api.task:434] Building contexts for mmlu_high_school_psychology on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 545/545 [00:00<00:00, 867.13it/s]
+2025-11-02:00:12:23 INFO     [api.task:434] Building contexts for mmlu_us_foreign_policy on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 100/100 [00:00<00:00, 854.61it/s]
+2025-11-02:00:12:23 INFO     [api.task:434] Building contexts for mmlu_high_school_microeconomics on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 238/238 [00:00<00:00, 873.30it/s]
+2025-11-02:00:12:23 INFO     [api.task:434] Building contexts for mmlu_public_relations on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 110/110 [00:00<00:00, 810.62it/s]
+2025-11-02:00:12:24 INFO     [api.task:434] Building contexts for mmlu_professional_law on rank 0...
+100%|█████████████████████████████████████████████████████████████████| 1534/1534 [00:01<00:00, 855.31it/s]
+2025-11-02:00:12:25 INFO     [api.task:434] Building contexts for mmlu_high_school_world_history on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 237/237 [00:00<00:00, 852.50it/s]
+2025-11-02:00:12:26 INFO     [api.task:434] Building contexts for mmlu_jurisprudence on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 108/108 [00:00<00:00, 914.64it/s]
+2025-11-02:00:12:26 INFO     [api.task:434] Building contexts for mmlu_philosophy on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 311/311 [00:00<00:00, 852.64it/s]
+2025-11-02:00:12:26 INFO     [api.task:434] Building contexts for mmlu_international_law on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 121/121 [00:00<00:00, 896.31it/s]
+2025-11-02:00:12:26 INFO     [api.task:434] Building contexts for mmlu_logical_fallacies on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 163/163 [00:00<00:00, 842.75it/s]
+2025-11-02:00:12:27 INFO     [api.task:434] Building contexts for mmlu_high_school_us_history on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 204/204 [00:00<00:00, 878.58it/s]
+2025-11-02:00:12:27 INFO     [api.task:434] Building contexts for mmlu_moral_disputes on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 346/346 [00:00<00:00, 873.18it/s]
+2025-11-02:00:12:27 INFO     [api.task:434] Building contexts for mmlu_world_religions on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 171/171 [00:00<00:00, 836.61it/s]
+2025-11-02:00:12:28 INFO     [api.task:434] Building contexts for mmlu_prehistory on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 324/324 [00:00<00:00, 874.52it/s]
+2025-11-02:00:12:28 INFO     [api.task:434] Building contexts for mmlu_formal_logic on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 126/126 [00:00<00:00, 841.35it/s]
+2025-11-02:00:12:28 INFO     [api.task:434] Building contexts for mmlu_moral_scenarios on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 895/895 [00:01<00:00, 874.24it/s]
+2025-11-02:00:12:29 INFO     [api.task:434] Building contexts for mmlu_high_school_european_history on rank 0...
+100%|███████████████████████████████████████████████████████████████████| 165/165 [00:00<00:00, 866.37it/s]
+2025-11-02:00:12:29 INFO     [evaluator:559] Running loglikelihood requests
+Running loglikelihood requests:   0%|                                            | 0/56168 [00:00<?, ?it/s]Passed argument batch_size = auto:1. Detecting largest batch size
+Determined largest batch size: 32
+Running loglikelihood requests: 100%|███████████████████████████████| 56168/56168 [04:43<00:00, 198.32it/s]
+fatal: not a git repository (or any parent up to mount point /egr/research-optml)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+2025-11-02:00:17:45 INFO     [loggers.evaluation_tracker:209] Saving results aggregated
+hf (pretrained=models/alpha1.4x1.4_lr7.5e-5_wmdp_500_reasoning_assistant_assist_loss_1/checkpoint_499,cache_dir=./.cache,device_map=auto,parallelize=True), gen_kwargs: (None), limit: None, num_fewshot: None, batch_size: auto (32)
+|                 Tasks                 |Version|Filter|n-shot|Metric|   |Value |   |Stderr|
+|---------------------------------------|------:|------|-----:|------|---|-----:|---|-----:|
+|mmlu                                   |      2|none  |      |acc   |↑  |0.4635|±  |0.0041|
+| - humanities                          |      2|none  |      |acc   |↑  |0.4132|±  |0.0070|
+|  - formal_logic                       |      1|none  |     0|acc   |↑  |0.4524|±  |0.0445|
+|  - high_school_european_history       |      1|none  |     0|acc   |↑  |0.4667|±  |0.0390|
+|  - high_school_us_history             |      1|none  |     0|acc   |↑  |0.4804|±  |0.0351|
+|  - high_school_world_history          |      1|none  |     0|acc   |↑  |0.5274|±  |0.0325|
+|  - international_law                  |      1|none  |     0|acc   |↑  |0.5537|±  |0.0454|
+|  - jurisprudence                      |      1|none  |     0|acc   |↑  |0.5370|±  |0.0482|
+|  - logical_fallacies                  |      1|none  |     0|acc   |↑  |0.5215|±  |0.0392|
+|  - moral_disputes                     |      1|none  |     0|acc   |↑  |0.4711|±  |0.0269|
+|  - moral_scenarios                    |      1|none  |     0|acc   |↑  |0.2425|±  |0.0143|
+|  - philosophy                         |      1|none  |     0|acc   |↑  |0.4887|±  |0.0284|
+|  - prehistory                         |      1|none  |     0|acc   |↑  |0.5556|±  |0.0276|
+|  - professional_law                   |      1|none  |     0|acc   |↑  |0.3566|±  |0.0122|
+|  - world_religions                    |      1|none  |     0|acc   |↑  |0.6901|±  |0.0355|
+| - other                               |      2|none  |      |acc   |↑  |0.5021|±  |0.0086|
+|  - business_ethics                    |      1|none  |     0|acc   |↑  |0.5400|±  |0.0501|
+|  - clinical_knowledge                 |      1|none  |     0|acc   |↑  |0.3698|±  |0.0297|
+|  - college_medicine                   |      1|none  |     0|acc   |↑  |0.3931|±  |0.0372|
+|  - global_facts                       |      1|none  |     0|acc   |↑  |0.3900|±  |0.0490|
+|  - human_aging                        |      1|none  |     0|acc   |↑  |0.4933|±  |0.0336|
+|  - management                         |      1|none  |     0|acc   |↑  |0.5922|±  |0.0487|
+|  - marketing                          |      1|none  |     0|acc   |↑  |0.7009|±  |0.0300|
+|  - medical_genetics                   |      1|none  |     0|acc   |↑  |0.3700|±  |0.0485|
+|  - miscellaneous                      |      1|none  |     0|acc   |↑  |0.6973|±  |0.0164|
+|  - nutrition                          |      1|none  |     0|acc   |↑  |0.4281|±  |0.0283|
+|  - professional_accounting            |      1|none  |     0|acc   |↑  |0.3475|±  |0.0284|
+|  - professional_medicine              |      1|none  |     0|acc   |↑  |0.3897|±  |0.0296|
+|  - virology                           |      1|none  |     0|acc   |↑  |0.2892|±  |0.0353|
+| - social sciences                     |      2|none  |      |acc   |↑  |0.5177|±  |0.0089|
+|  - econometrics                       |      1|none  |     0|acc   |↑  |0.2719|±  |0.0419|
+|  - high_school_geography              |      1|none  |     0|acc   |↑  |0.5556|±  |0.0354|
+|  - high_school_government_and_politics|      1|none  |     0|acc   |↑  |0.5751|±  |0.0357|
+|  - high_school_macroeconomics         |      1|none  |     0|acc   |↑  |0.4615|±  |0.0253|
+|  - high_school_microeconomics         |      1|none  |     0|acc   |↑  |0.4454|±  |0.0323|
+|  - high_school_psychology             |      1|none  |     0|acc   |↑  |0.6202|±  |0.0208|
+|  - human_sexuality                    |      1|none  |     0|acc   |↑  |0.5420|±  |0.0437|
+|  - professional_psychology            |      1|none  |     0|acc   |↑  |0.4641|±  |0.0202|
+|  - public_relations                   |      1|none  |     0|acc   |↑  |0.4818|±  |0.0479|
+|  - security_studies                   |      1|none  |     0|acc   |↑  |0.4490|±  |0.0318|
+|  - sociology                          |      1|none  |     0|acc   |↑  |0.6219|±  |0.0343|
+|  - us_foreign_policy                  |      1|none  |     0|acc   |↑  |0.7400|±  |0.0441|
+| - stem                                |      2|none  |      |acc   |↑  |0.4475|±  |0.0088|
+|  - abstract_algebra                   |      1|none  |     0|acc   |↑  |0.3900|±  |0.0490|
+|  - anatomy                            |      1|none  |     0|acc   |↑  |0.5407|±  |0.0430|
+|  - astronomy                          |      1|none  |     0|acc   |↑  |0.5592|±  |0.0404|
+|  - college_biology                    |      1|none  |     0|acc   |↑  |0.4306|±  |0.0414|
+|  - college_chemistry                  |      1|none  |     0|acc   |↑  |0.3700|±  |0.0485|
+|  - college_computer_science           |      1|none  |     0|acc   |↑  |0.4500|±  |0.0500|
+|  - college_mathematics                |      1|none  |     0|acc   |↑  |0.3700|±  |0.0485|
+|  - college_physics                    |      1|none  |     0|acc   |↑  |0.3725|±  |0.0481|
+|  - computer_security                  |      1|none  |     0|acc   |↑  |0.6000|±  |0.0492|
+|  - conceptual_physics                 |      1|none  |     0|acc   |↑  |0.4170|±  |0.0322|
+|  - electrical_engineering             |      1|none  |     0|acc   |↑  |0.5241|±  |0.0416|
+|  - elementary_mathematics             |      1|none  |     0|acc   |↑  |0.4471|±  |0.0256|
+|  - high_school_biology                |      1|none  |     0|acc   |↑  |0.5161|±  |0.0284|
+|  - high_school_chemistry              |      1|none  |     0|acc   |↑  |0.4335|±  |0.0349|
+|  - high_school_computer_science       |      1|none  |     0|acc   |↑  |0.4700|±  |0.0502|
+|  - high_school_mathematics            |      1|none  |     0|acc   |↑  |0.3852|±  |0.0297|
+|  - high_school_physics                |      1|none  |     0|acc   |↑  |0.3642|±  |0.0393|
+|  - high_school_statistics             |      1|none  |     0|acc   |↑  |0.4769|±  |0.0341|
+|  - machine_learning                   |      1|none  |     0|acc   |↑  |0.3125|±  |0.0440|
+
+|      Groups      |Version|Filter|n-shot|Metric|   |Value |   |Stderr|
+|------------------|------:|------|------|------|---|-----:|---|-----:|
+|mmlu              |      2|none  |      |acc   |↑  |0.4635|±  |0.0041|
+| - humanities     |      2|none  |      |acc   |↑  |0.4132|±  |0.0070|
+| - other          |      2|none  |      |acc   |↑  |0.5021|±  |0.0086|
+| - social sciences|      2|none  |      |acc   |↑  |0.5177|±  |0.0089|
+| - stem           |      2|none  |      |acc   |↑  |0.4475|±  |0.0088|
