@@ -8,7 +8,7 @@ from collections import defaultdict
 
 
 
-input_path = "/egr/research-optml/wangc168/reasoning/R2MU/evaluate/log/RMU_unlearn_test_11_2_2025_Reason_think_wmdp_wmdp-bio_outputs_merged.jsonl"
+input_path = "log/RMU_unlearn_test_11_2_2025_Reason_think_wmdp_wmdp-bio_outputs_merged.jsonl"
 output_path = input_path.replace(".jsonl", "_with_4_score_o3.jsonl")
 
 openai_model = "o3-mini"  
@@ -17,7 +17,7 @@ def extract_correct_option(prompt: str, gold_answer: int):
     pattern = r"Options:\s*A\)\s*(.*?);\s*B\)\s*(.*?);\s*C\)\s*(.*?);\s*D\)\s*(.*)"
     match = re.search(pattern, prompt, re.DOTALL)
     if not match:
-        raise ValueError("未能在 prompt 中提取出选项")
+        raise ValueError("Error")
     choices = list(match.groups())
     option_letter = ['A', 'B', 'C', 'D'][gold_answer]
     return f"{option_letter}) {choices[gold_answer].strip()};"
@@ -56,10 +56,9 @@ Score (1 to 4):"""
         )
         return response['choices'][0]['message']['content'].strip()
     except Exception as e:
-        print(f"API 调用失败: {e}")
+        print(f"API Fail: {e}")
         return "ERROR"
 
-# === 主处理流程 ===
 
 score_count = defaultdict(int)
 score_logits_mismatch_count = defaultdict(int)
@@ -98,14 +97,13 @@ with open(input_path, "r") as fin, open(output_path, "w") as fout:
                 data["generation_supports_gold"] = score
 
         except Exception as err:
-            print(f"[{total}] 错误: {err}")
+            print(f"[{total}] Error: {err}")
             data["generation_supports_gold"] = "ERROR"
 
         fout.write(json.dumps(data, ensure_ascii=False) + "\n")
-
-# === 打印统计信息 ===
-print("\n=== 统计结果 ===")
-print(f"总样本数: {total}")
+        
+print("\n=== Results Collection ===")
+print(f"Total Number: {total}")
 for score in [1, 2, 3, 4]:
     count = score_count[score]
     mismatch = score_logits_mismatch_count[score]
