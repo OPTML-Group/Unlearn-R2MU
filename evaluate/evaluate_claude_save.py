@@ -277,7 +277,7 @@ def main():
     
     # Clean up distributed environment
     if args.device == "cuda":
-        dist.barrier()  # 等待所有进程都执行完保存
+        dist.barrier()
         if dist.get_rank() == 0:
             merge_ranked_jsonls(file_name)
         dist.destroy_process_group()
