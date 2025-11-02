@@ -92,3 +92,12 @@ And please change the API key in api_check_reasoning_trace_score_4.py and change
 ```
 python ./evaluate/api_check_reasoning_trace_score_4.py
 ```
+## Cite this work
+```
+@article{wang2025reasoning,
+  title={Reasoning Model Unlearning: Forgetting Traces, Not Just Answers, While Preserving Reasoning Skills},
+  author={Wang, Changsheng and Fan, Chongyu and Zhang, Yihua and Jia, Jinghan and Wei, Dennis and Ram, Parikshit and Baracaldo, Nathalie and Liu, Sijia},
+  journal={arXiv preprint arXiv:2506.12963},
+  year={2025}
+}
+```
